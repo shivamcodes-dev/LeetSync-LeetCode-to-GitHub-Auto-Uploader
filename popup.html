@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LeetSync</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="header">
+    <img class="logo" src="icons/icon48.png" alt="" width="36" height="36" />
+    <div class="title">
+      <h1>LeetSync</h1>
+      <p>LeetCode &rarr; GitHub, automatically</p>
+    </div>
+    <span id="status-pill" class="pill off">Loading</span>
+  </header>
+
+  <section class="card status-card" aria-label="Automatic upload status">
+    <div class="status-row">
+      <div>
+        <div class="label">Automatic upload</div>
+        <div id="status-text" class="status-text">&nbsp;</div>
+        <div id="status-sub" class="muted small">&nbsp;</div>
+      </div>
+      <label class="switch" title="Turn automatic upload on or off">
+        <input id="auto-toggle" type="checkbox" checked />
+        <span class="slider"></span>
+        <span class="sr-only">Automatic upload</span>
+      </label>
+    </div>
+  </section>
+
+  <div id="failure-card" class="card failure" hidden>
+    <div class="label">Last upload did not go through</div>
+    <p id="failure-text" class="failure-text"></p>
+    <div class="row">
+      <button id="retry-btn" type="button" class="btn small">Retry upload</button>
+      <button id="dismiss-btn" type="button" class="btn small ghost">Dismiss</button>
+    </div>
+  </div>
+
+  <form id="settings-form" class="card" novalidate autocomplete="off">
+    <div class="label">GitHub repository</div>
+
+    <div class="field">
+      <label for="username">GitHub username</label>
+      <input id="username" type="text" spellcheck="false" autocapitalize="off" placeholder="octocat" />
+      <span id="err-username" class="field-error" role="alert"></span>
+    </div>
+
+    <div class="field">
+      <label for="repo">Repository name</label>
+      <input id="repo" type="text" spellcheck="false" autocapitalize="off" placeholder="LeetCode-Solutions" />
+      <span id="err-repo" class="field-error" role="alert"></span>
+    </div>
+
+    <div class="field">
+      <label for="token">Personal Access Token</label>
+      <div class="input-with-button">
+        <input id="token" type="password" spellcheck="false" autocapitalize="off" placeholder="github_pat_..." />
+        <button id="toggle-token" type="button" class="btn ghost small" aria-pressed="false" aria-label="Show token">Show</button>
+      </div>
+      <span id="err-token" class="field-error" role="alert"></span>
+    </div>
+
+    <div class="field">
+      <label for="branch">Branch</label>
+      <input id="branch" type="text" spellcheck="false" autocapitalize="off" placeholder="main" value="main" />
+      <span id="err-branch" class="field-error" role="alert"></span>
+    </div>
+
+    <div class="row buttons">
+      <button id="save-btn" type="submit" class="btn primary">Save settings</button>
+      <button id="test-btn" type="button" class="btn">Test GitHub connection</button>
+    </div>
+
+    <div id="message" class="message" role="status" aria-live="polite" hidden></div>
+
+    <div id="connection" class="connection" hidden>
+      <span class="dot"></span>
+      <div>
+        <div>Connected to <strong id="connection-repo"></strong></div>
+        <div class="muted small">Branch: <code id="connection-branch"></code></div>
+      </div>
+    </div>
+  </form>
+
+  <section class="card" aria-label="Last uploaded solution">
+    <div class="label">Last uploaded solution</div>
+    <p id="last-empty" class="muted small">Nothing uploaded yet. Submit a solution on LeetCode and it will show up here.</p>
+    <div id="last-body" hidden>
+      <div id="last-title" class="last-title"></div>
+      <div id="last-meta" class="muted small"></div>
+      <a id="last-link" class="link small" href="#" target="_blank" rel="noopener noreferrer" hidden>View on GitHub</a>
+    </div>
+  </section>
+
+  <details class="card help">
+    <summary>Which token permissions are needed?</summary>
+    <div class="help-body small">
+      <p><strong>Fine-grained token (recommended)</strong><br />
+        Repository access: <em>Only select repositories</em> &rarr; your solutions repo.<br />
+        Repository permissions: <em>Contents &rarr; Read and write</em> (Metadata: Read is added automatically).
+        <a class="link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Create one</a>
+      </p>
+      <p><strong>Classic token</strong><br />
+        Scope <code>repo</code> (private repositories) or <code>public_repo</code> (public only).
+        <a class="link" href="https://github.com/settings/tokens/new" target="_blank" rel="noopener noreferrer">Create one</a>
+      </p>
+      <p class="muted">The token is stored only in this browser (<code>chrome.storage.local</code>) and is only sent to api.github.com.</p>
+    </div>
+  </details>
+
+  <script src="github.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
